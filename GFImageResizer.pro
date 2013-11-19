@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core widgets
 
 INCLUDEPATH += /usr/include/ImageMagick
 LIBS += -lMagick++ -lMagickCore
@@ -18,8 +18,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     resolution.cpp \
-    resolutions.cpp
+    resolutions.cpp \
+    GUI/mainwindow.cpp
 
 HEADERS += \
     resolution.hpp \
-    resolutions.hpp
+    resolutions.hpp \
+    GUI/mainwindow.hpp
