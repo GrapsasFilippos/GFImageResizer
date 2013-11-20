@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QProgressBar>
 #include <QFileDialog>
+#include <QImage>
 
 #include "resolutions.hpp"
 #include "resolution.hpp"

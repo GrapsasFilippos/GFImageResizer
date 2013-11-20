@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QList>
 
-#include <ImageMagick/Magick++.h>
 #include <stdexcept>
 
 #include "GUI/mainwindow.hpp"

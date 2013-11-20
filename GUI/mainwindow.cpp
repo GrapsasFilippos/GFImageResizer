@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect( bStart, SIGNAL( clicked() ), this, SLOT( start() ) );
 
     leFilePath->setReadOnly(true);
+    leFilePath->setText("");
 
     bSelectFile->setText("&Select file");
     bStart->setText("St&art");
@@ -87,24 +88,25 @@ void MainWindow::start() {
     progressBar->setValue( 0 );
 
 
-    Magick::Image img, img2;
-    Magick::Geometry geometry;
-    Magick::Geometry resGeometry;
-    Magick::Geometry * cropGeometry = 0;
+    QImage qImg, qImg2;
+    Geometry geometry;
+    Geometry resGeometry;
+    Geometry * cropGeometry = 0;
 
     try {
         qDebug() << "img.read:" << leFilePath->text();
-        img.read( leFilePath->text().toStdString() );
+        qImg.load( leFilePath->text() );
     }
     catch( std::exception &error_ ) {
         qDebug() << error_.what();
         return;
     }
 
-    geometry = img.size();
+    geometry.width( qImg.size().width() );
+    geometry.height( qImg.size().height() );
 
     for(int i = 0; i < lRes->size(); i++) {
-        img2 = img;
+        qImg2 = qImg;
         newFilePath = leFilePath->text();
         newFilePath.insert( (newFilePath.size() - 4), '-' );
         newFilePath.insert( (newFilePath.size() - 4), QString::number( lRes->at(i)->getWidth() ) );
@@ -118,12 +120,12 @@ void MainWindow::start() {
         cropGeometry = resolutions->needCrop( geometry.width(), geometry.height(), resGeometry.width(), resGeometry.height() );
 
         if( cropGeometry ) {
-            img2.crop( *cropGeometry );
+            qImg2 = qImg.copy(cropGeometry->xOff(), cropGeometry->yOff(), cropGeometry->width(), cropGeometry->height());
             delete( cropGeometry );
         }
 
-        img2.resize( resGeometry );
-        img2.write( newFilePath.toStdString() );
+        qImg2 = qImg2.scaled( resGeometry.width(), resGeometry.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+        qImg2.save( newFilePath );
 
         progressBar->setValue( progressBar->value() + 1 );
     }

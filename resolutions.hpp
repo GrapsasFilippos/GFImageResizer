@@ -4,14 +4,14 @@
 
 #include <QDebug>
 
-#include <ImageMagick/Magick++.h>
+#include "geometry.hpp"
 
 
 class Resolutions
 {
     public:
         Resolutions();
-        Magick::Geometry * needCrop( int fW, int fH, int tW, int tH );
+        Geometry * needCrop( int fW, int fH, int tW, int tH );
 };
 
 

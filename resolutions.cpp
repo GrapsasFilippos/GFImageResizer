@@ -4,9 +4,9 @@ Resolutions::Resolutions() {
 }
 
 
-Magick::Geometry * Resolutions::needCrop(int fW, int fH, int tW, int tH) {
+Geometry * Resolutions::needCrop(int fW, int fH, int tW, int tH) {
 
-    Magick::Geometry * newGeometry = new Magick::Geometry();
+    Geometry * newGeometry = new Geometry();
 
     const double wDiff = (double)fW / (double)tW;
     const double hDiff = (double)fH / (double)tH;
