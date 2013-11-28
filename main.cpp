@@ -5,12 +5,12 @@
 
 #include "GUI/mainwindow.hpp"
 
-#include <QDebug>
+//#include <QDebug>
 
 
 int main( int argc, char *argv[] )
 {
-    qDebug() << "start";
+    //qDebug() << "start";
     QApplication app(argc, argv);
 
 
@@ -18,6 +18,6 @@ int main( int argc, char *argv[] )
     mainWin.show();
 
 
-    qDebug() << "finish";
+    //qDebug() << "finish";
     return app.exec();
 }

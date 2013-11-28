@@ -2,7 +2,7 @@
 #define RESOLUTIONS_HPP
 
 
-#include <QDebug>
+//#include <QDebug>
 
 #include "geometry.hpp"
 

@@ -1,16 +1,16 @@
 #include "mainwindow.hpp"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    cWidget = new QWidget;
-    vLayout = new QVBoxLayout();
-    hLayout = new QHBoxLayout();
-    leFilePath = new QLineEdit();
-    bSelectFile = new QPushButton();
-    bStart = new QPushButton();
-    progressBar = new QProgressBar();
-
-    connect( bSelectFile, SIGNAL( clicked() ), this, SLOT( selectFile() ) );
-    connect( bStart, SIGNAL( clicked() ), this, SLOT( start() ) );
+    cWidget = new QWidget( this );
+    vLayout = new QVBoxLayout( cWidget );
+    h1Layout = new QHBoxLayout();
+    h2Layout = new QHBoxLayout();
+    leFilePath = new QLineEdit( this );
+    bSelectFile = new QPushButton( this );
+    bStart = new QPushButton( this );
+    slider = new QSlider(Qt::Horizontal, this);
+    lSlider = new QLabel( this );
+    progressBar = new QProgressBar( this );
 
     leFilePath->setReadOnly(true);
     leFilePath->setText("");
@@ -18,15 +18,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     bSelectFile->setText("&Select file");
     bStart->setText("St&art");
     bStart->setDisabled(true);
+    slider->setMinimum( 0 );
+    slider->setMaximum( 100 );
+    slider->setValue( 50 ); setQuality( 50 );
     progressBar->setMinimum(0);
     progressBar->setMaximum(6);
     progressBar->setValue(0);
 
-    hLayout->addWidget(leFilePath);
-    hLayout->addWidget(bSelectFile);
-    hLayout->addWidget(bStart);
+    connect( bSelectFile, SIGNAL( clicked() ), this, SLOT( selectFile() ) );
+    connect( bStart, SIGNAL( clicked() ), this, SLOT( start() ) );
+    connect( slider, SIGNAL( valueChanged( int ) ), this, SLOT( setQuality(int) ) );
 
-    vLayout->addLayout(hLayout);
+    h1Layout->addWidget(leFilePath);
+    h1Layout->addWidget(bSelectFile);
+    h1Layout->addWidget(bStart);
+
+    h2Layout->addWidget( lSlider );
+    h2Layout->addWidget( slider );
+
+    vLayout->addLayout(h1Layout);
+    vLayout->addLayout( h2Layout );
     vLayout->addWidget(progressBar);
 
     cWidget->setLayout(vLayout);
@@ -39,11 +50,33 @@ MainWindow::~MainWindow() {
 }
 
 
+void MainWindow::setQuality(int q) {
+    quality = q;
+    setLSliderQuality( q );
+}
+
+
+int MainWindow::getQuality() {
+    return quality;
+}
+
+
+void MainWindow::setLSliderQuality(int q) {
+    QString string("Quality: ");
+    string.append("(");
+    string.append( QString::number( q ) );
+    string.append(") ");
+
+    lSlider->setText( string );
+}
+
+
 void MainWindow::selectFile() {
     QString fp;
     fp = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(), tr("Images (*.png *.jpg)"));
 
     if( !fp.isNull() ) {
+        progressBar->setValue( 0 );
         leFilePath->setText( fp );
         bStart->setDisabled(false);
     }
@@ -57,6 +90,7 @@ void MainWindow::start() {
     leFilePath->setDisabled( true );
     bSelectFile->setDisabled( true );
     bStart->setDisabled( true );
+    slider->setDisabled( true );
 
     QString newFilePath;
 
@@ -94,11 +128,11 @@ void MainWindow::start() {
     Geometry * cropGeometry = 0;
 
     try {
-        qDebug() << "img.read:" << leFilePath->text();
+        //qDebug() << "img.read:" << leFilePath->text();
         qImg.load( leFilePath->text() );
     }
     catch( std::exception &error_ ) {
-        qDebug() << error_.what();
+        //qDebug() << error_.what();
         return;
     }
 
@@ -112,8 +146,8 @@ void MainWindow::start() {
         newFilePath.insert( (newFilePath.size() - 4), QString::number( lRes->at(i)->getWidth() ) );
         newFilePath.insert( (newFilePath.size() - 4), 'x' );
         newFilePath.insert( (newFilePath.size() - 4), QString::number( lRes->at(i)->getHeight() ) );
-        qDebug() << "-----------------";
-        qDebug() << newFilePath;
+        //qDebug() << "-----------------";
+        //qDebug() << newFilePath;
 
         resGeometry.width( lRes->at(i)->getWidth() );
         resGeometry.height( lRes->at(i)->getHeight() );
@@ -125,7 +159,7 @@ void MainWindow::start() {
         }
 
         qImg2 = qImg2.scaled( resGeometry.width(), resGeometry.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-        qImg2.save( newFilePath );
+        qImg2.save( newFilePath, 0, getQuality() );
 
         progressBar->setValue( progressBar->value() + 1 );
     }
@@ -136,4 +170,5 @@ void MainWindow::start() {
     leFilePath->setDisabled( false );
     bSelectFile->setDisabled( false );
     bStart->setDisabled( false );
+    slider->setDisabled( false );
 }

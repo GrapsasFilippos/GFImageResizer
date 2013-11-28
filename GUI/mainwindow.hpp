@@ -9,6 +9,8 @@
 #include <QProgressBar>
 #include <QFileDialog>
 #include <QImage>
+#include <QSlider>
+#include <QLabel>
 
 #include "resolutions.hpp"
 #include "resolution.hpp"
@@ -25,16 +27,24 @@ class MainWindow : public QMainWindow
     public slots:
         void selectFile();
         void start();
+        void setQuality( int q );
 
     private:
+        int getQuality();
+        void setLSliderQuality( int q );
+
+        int quality;
+
         QWidget * cWidget;
         QVBoxLayout * vLayout;
-        QHBoxLayout * hLayout;
+        QHBoxLayout * h1Layout;
+        QHBoxLayout * h2Layout;
         QLineEdit * leFilePath;
         QPushButton * bSelectFile;
         QPushButton * bStart;
         QProgressBar * progressBar;
-        //QString * filePath;
+        QSlider * slider;
+        QLabel * lSlider;
 };
 
 
