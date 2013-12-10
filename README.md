@@ -1,5 +1,14 @@
 (My new toy). GFImageResizer resizes an image file to various resolutions.
 
+## Download
+
+Source code: [GFImageResizer-20131128-beta.tar.gz](https://github.com/GrapsasFilippos/GFImageResizer/archive/v20131128-beta.tar.gz)  
+Windows installer: [GFImageResizer-20131128-beta-Win7.torrent](https://dl.dropboxusercontent.com/u/33938998/GFImageResizer-20131128-beta-Win7.torrent)
+
+md5:  
+`2b6459bbe13605ef78fc205dee1be60c  GFImageResizer-20131128-beta.tar.gz`  
+`46d84187b54a5ce0a2fde16fee66b2f4  GFImageResizer-20131128-beta-Win7.exe`
+
 ## Linux
 
 ### Compile
